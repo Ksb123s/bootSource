@@ -13,11 +13,11 @@
     </div>
 
     <div>
-      <input type="text" name="" id="" size="5" th:text="${cDto.num1}" />1
+      <input type="text" name="" id="" size="5" th:value="${cDto.num1}" readonly />
       <span th:text="${cDto.op}"></span>
-      <input type="text" name="" id="" size="5" th:text="${cDto.num2}" />
+      <input type="text" name="" id="" size="5" th:value="${cDto.num2}" readonly />
       =
-      <input type="text" name="" id="" size="5" th:text="${cDto.result}" />
+      <input type="text" name="" id="" size="5" th:value="${cDto.result}" readonly />
     </div>
   </body>
 </html>
