@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EX3</title>
+  </head>
+  <body>
+    <h1>Ex3</h1>
+    <ul>
+      <!-- / 가 앞에 붙어있으면 http://localhost:8080/sample/ex1 부터 시작 -->
+      <li><a th:href="@{/sample/ex1}">ex1</a></li>
+      <!-- / 가 앞에 붙어있으면 http://localhost:8080/ 부터 시작 -->
+      <!-- http://localhost:8080/sample/ex3 ==> 에서 뒤에만 변경 -->
+      <li><a th:href="@{ex1}">ex1</a></li>
+      <li><a th:href="@{ex4(param1='data1', param2='data2')}">ex4</a></li>
+    </ul>
+  </body>
+</html>
