@@ -30,7 +30,7 @@ public class MemberDto {
     @Max(value = 120)
     private Integer age;
 
-    @Email(message = "이메일은 필수 요소입니다.") // Email 검증
+    @Email(message = "이메일은 필수 요소입니다.    ") // Email 검증
     @NotEmpty // @NotNull + " "값 불가
     private String email;
     @Length(min = 2, max = 5) // 최소/최대 글자수 설정
