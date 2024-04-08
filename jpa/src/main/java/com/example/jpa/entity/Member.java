@@ -13,27 +13,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.Getter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 
 @Builder
-@Setter
-@Getter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "membertbl", uniqueConstraints = {
         @UniqueConstraint(name = "NAME_AGE_UNIQUE", columnNames = { "name", "age" }) })
 @Entity
 public class Member {
 
-    // id, name, age, roleType(ADMIN,User),created_date, last_modified_date,
-    // description
-
+    // id,name,age,roleType(ADMIN,USER),created_date,last_modified_date,description
     @Id
     private String id;
 
@@ -53,4 +51,5 @@ public class Member {
 
     @Lob
     private String description;
+
 }

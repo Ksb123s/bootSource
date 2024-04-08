@@ -8,15 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.jpa.entity.Board;
 import com.example.jpa.entity.Item;
-import com.example.jpa.entity.ItemSellStatus;
+import com.example.jpa.entity.ItemStatus;
 
 @SpringBootTest
 public class ItemRepositoryTest {
 
     @Autowired
-    private itemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Test
     public void createTest() {
@@ -25,9 +24,8 @@ public class ItemRepositoryTest {
                     .itemNm("운동화" + i)
                     .price(95000 * i)
                     .stockNumber(30)
-                    .itemSellStatus(ItemSellStatus.SELL)
+                    .itemSellStatus(ItemStatus.SELL)
                     .build();
-
             itemRepository.save(item);
         });
     }
@@ -35,28 +33,25 @@ public class ItemRepositoryTest {
     @Test
     public void readTest() {
         System.out.println(itemRepository.findById(2L));
-
-        System.out.println("------------------");
+        System.out.println("---------------");
         itemRepository.findAll().forEach(item -> System.out.println(item));
     }
 
     @Test
     public void updateTest() {
-        Optional<Item> result = itemRepository.findById(5L);
-
-        result.ifPresent(item -> {
-            item.setItemNm("티셔츠");
-            item.setPrice(8421548);
-
-            System.out.println(itemRepository.save(item));
-        });
+        // entity 찾기
+        Item item = itemRepository.findById(2L).get();
+        // 수정 - 아이템명, 가격
+        item.setItemNm("바지");
+        item.setPrice(125000);
+        System.out.println(itemRepository.save(item));
     }
 
     @Test
     public void deleteTest() {
-        Optional<Item> result = itemRepository.findById(8L);
-
-        itemRepository.delete(result.get());
-        System.out.println("item 삭제 : " + itemRepository.findById(8L));
+        // entity 찾기
+        Item item = itemRepository.findById(2L).get();
+        // 삭제
+        itemRepository.delete(item);
     }
 }

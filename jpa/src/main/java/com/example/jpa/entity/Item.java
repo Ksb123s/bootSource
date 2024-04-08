@@ -3,7 +3,6 @@ package com.example.jpa.entity;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
-
 import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.Column;
@@ -14,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,13 +20,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "Item")
 @Entity
 public class Item {
 
@@ -40,20 +37,17 @@ public class Item {
     @Column(length = 50)
     private String itemNm;
 
-    @Column(length = 10)
-    private Integer price;
+    private int price;
 
-    @Column(length = 10)
-    private Integer stockNumber;
+    private int stockNumber;
 
-    @Column(length = 255)
     private String itemDetail;
 
     @Enumerated(EnumType.STRING)
-    private ItemSellStatus itemSellStatus;
+    private ItemStatus itemSellStatus;
 
     @CreatedDate
-    private LocalDateTime reqTime;
+    private LocalDateTime regTime;
 
     @LastModifiedDate
     private LocalDateTime updateTime;
