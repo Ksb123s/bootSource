@@ -20,8 +20,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-public class Item {
+@Entity(name = "Mart_Item")
+public class Item extends BaseEntity {
 
     @SequenceGenerator(name = "mart_item_seq_gen", sequenceName = "item_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mart_item_seq_gen")
