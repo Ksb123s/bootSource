@@ -1,4 +1,4 @@
-package com.example.todo.dto;
+package com.example.book.dto;
 
 import java.time.LocalDateTime;
 
@@ -10,20 +10,26 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Builder
-@Setter
-@Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class TodoDto {
+@Getter
+@Setter
+@ToString
+public class BookDto {
 
     private Long id;
 
-    private Boolean completed;
-
-    private Boolean important;
-
     private String title;
+
+    private String writer;
+
+    private String publisher;
+
+    private String cartegory;
+
+    private Integer price;
+
+    private Integer salePrice;
 
     private LocalDateTime createdDate;
 

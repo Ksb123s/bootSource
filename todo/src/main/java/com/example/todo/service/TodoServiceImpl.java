@@ -15,12 +15,14 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor // @AutoWired == private TodoRepository todoRepository
 @Service
 @Log4j2
-public class TodoServiceImpl {
+public class TodoServiceImpl implements TodoService {
 
     private final TodoRepository todoRepository;
 
+    @Override
     public List<TodoDto> getList() {
-        List<Todo> list = todoRepository.findAll();
+        // 미완료 목록
+        List<Todo> list = todoRepository.findByCompleted(false);
         // Todo => TodoDto 변환
         List<TodoDto> todoList = new ArrayList<>();
 
@@ -28,7 +30,22 @@ public class TodoServiceImpl {
         return todoList;
     }
 
-    private TodoDto entityToDto(Todo entity) {
+    @Override
+    public TodoDto create(TodoDto dto) {
+        // TodoDto ==> Todo 변환
+
+        Todo entity = todoRepository.save(dtoToEntity(dto));
+        return entityToDto(entity);
+    }
+
+    @Override
+    public void todoDelete(Long id) {
+
+        todoRepository.deleteById(id);
+    }
+
+    @Override
+    public TodoDto entityToDto(Todo entity) {
         return TodoDto.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
@@ -39,4 +56,41 @@ public class TodoServiceImpl {
                 .build();
     }
 
+    @Override
+    public Todo dtoToEntity(TodoDto dto) {
+        return Todo.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .completed(dto.getCompleted())
+                .important(dto.getImportant())
+                .build();
+    }
+
+    @Override
+    public TodoDto getTodo(Long id) {
+        Todo todo = todoRepository.findById(id).get();
+
+        return entityToDto(todo);
+    }
+
+    @Override
+    public List<TodoDto> getCompletedList() {
+        List<Todo> compList = todoRepository.findByCompleted(true);
+
+        List<TodoDto> todoList = new ArrayList<>();
+
+        compList.forEach(todo -> todoList.add(entityToDto(todo)));
+
+        return todoList;
+    }
+
+    @Override
+    public Long todoUpdate(Long id) {
+        Todo entity = todoRepository.findById(id).get();
+        entity.setCompleted(true);
+
+        Todo todo = todoRepository.save(entity);
+
+        return todo.getId();
+    }
 }
