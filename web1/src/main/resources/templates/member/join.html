@@ -5,7 +5,7 @@
     <form action="" method="post" class="" th:object="${memberDto}" novalidate>
       <div class="mb-3">
         <label for="userid" class="form-label">ID</label>
-        <input type="text" class="form-control" id="userid" name="userid" th:value="${memberDto.userid}" />
+        <input type="text" class="form-control" id="userid" name="userid" />
         <div th:if="${#fields.hasErrors('userid')}" th:errors="*{userid}" class="text-danger"></div>
       </div>
       <div class="mb-3">

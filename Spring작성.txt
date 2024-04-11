@@ -69,4 +69,18 @@ project 구조
 
 
 
-    
+
+
+1. JPQL(Java Persistence Query Languege)
+        -테이블이 아닌 객체를 대상으로 검색하는 객체 지향 쿼리
+        -SQL 을 추상화해서 특정 데이터베이스 SQL에 의존하지 않음
+
+    ex)
+        SELECT m(Entity) FROM Member m WHERE m.username = 'JOHN'
+
+        findBy : 특정한 칼럼의 값 조회
+            Collection<T> findBy + 속성이름(타입);
+        and ,or 조건 처리
+         Collection<T> findBy TitleOrContent
+2. 네이티브 SQL
+    -JPA 에서 JSQL 대신 직접이용

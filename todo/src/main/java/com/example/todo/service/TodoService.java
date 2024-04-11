@@ -13,9 +13,9 @@ public interface TodoService {
 
     void todoDelete(Long id);
 
-    TodoDto entityToDto(Todo entity);
+    TodoDto entityToDto();
 
-    Todo dtoToEntity(TodoDto dto);
+    Todo dtoToEntity();
 
     TodoDto getTodo(Long id);
 
@@ -23,4 +23,23 @@ public interface TodoService {
 
     Long todoUpdate(Long id);
 
+    public default TodoDto entityToDto(Todo entity) {
+        return TodoDto.builder()
+                .id(entity.getId())
+                .title(entity.getTitle())
+                .createdDate(entity.getCreateDate())
+                .lastModifiedDate(entity.getLastModifiedDate())
+                .completed(entity.getCompleted())
+                .important(entity.getImportant())
+                .build();
+    }
+
+    public default Todo dtoToEntity(TodoDto dto) {
+        return Todo.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .completed(dto.getCompleted())
+                .important(dto.getImportant())
+                .build();
+    }
 }

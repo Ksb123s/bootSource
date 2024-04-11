@@ -14,14 +14,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row"></th>
-          <td></td>
+        <tr th:each="list : ${list}">
+          <th scope="row" th:text="${list.id}"></th>
+          <td th:text="${list.cartegoryName}"></td>
           <td>
-            <a class="text-decoration-none text-reset"></a>
+            <a class="text-decoration-none text-reset" th:href="@{read(id=${list.id})}" th:text="${list.title}"></a>
           </td>
-          <td></td>
-          <td></td>
+          <td th:text="${list.writer}"></td>
+          <td th:text="${list.publisherName}"></td>
         </tr>
       </tbody>
     </table>
@@ -44,4 +44,12 @@
       </ul>
     </nav>
   </div>
+  <th:block layout:fragment="script">
+    <script>
+      const result = "[[${result}]]";
+      if (result) {
+        alert("성공했습니다.");
+      }
+    </script>
+  </th:block>
 </html>

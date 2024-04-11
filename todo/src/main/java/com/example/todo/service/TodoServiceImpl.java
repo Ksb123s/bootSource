@@ -2,6 +2,8 @@ package com.example.todo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,11 @@ public class TodoServiceImpl implements TodoService {
         // 미완료 목록
         List<Todo> list = todoRepository.findByCompleted(false);
         // Todo => TodoDto 변환
-        List<TodoDto> todoList = new ArrayList<>();
+        // List<TodoDto> todoList = new ArrayList<>();
 
-        list.forEach(todo -> todoList.add(entityToDto(todo)));
+        // list.forEach(todo -> todoList.add(entityToDto(todo)));
+
+        List<TodoDto> todoList = list.stream().map(todo -> entityToDto(todo)).collect(Collectors.toList());
         return todoList;
     }
 
@@ -77,9 +81,10 @@ public class TodoServiceImpl implements TodoService {
     public List<TodoDto> getCompletedList() {
         List<Todo> compList = todoRepository.findByCompleted(true);
 
-        List<TodoDto> todoList = new ArrayList<>();
+        // List<TodoDto> todoList = new ArrayList<>();
 
-        compList.forEach(todo -> todoList.add(entityToDto(todo)));
+        // compList.forEach(todo -> todoList.add(entityToDto(todo)));
+        List<TodoDto> todoList = compList.stream().map(todo -> entityToDto(todo)).collect(Collectors.toList());
 
         return todoList;
     }
@@ -92,5 +97,17 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = todoRepository.save(entity);
 
         return todo.getId();
+    }
+
+    @Override
+    public TodoDto entityToDto() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'entityToDto'");
+    }
+
+    @Override
+    public Todo dtoToEntity() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'dtoToEntity'");
     }
 }
