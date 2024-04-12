@@ -68,4 +68,15 @@ public class MemoRepositoryTest {
         memoRepository.delete(memo);
         System.out.println("삭제 memo " + memoRepository.findById(24L));
     }
+
+    @Test
+    public void SQLTest() {
+
+        List<Memo> list = memoRepository.findByMnoLessThan(5L);
+        System.out.println("findByMnoLessThan :" + list.size());
+        List<Memo> list2 = memoRepository.findByMnoLessThanOrderByMnoDesc(10L);
+        System.out.println("findByMnoLessThanOrderByMnoDesc :" + list2.size());
+        List<Memo> list3 = memoRepository.findByMnoBetween(50L, 70L);
+        System.out.println("findByMnoBetween :" + list3.size());
+    }
 }

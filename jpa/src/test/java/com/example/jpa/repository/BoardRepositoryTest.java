@@ -65,8 +65,12 @@ public class BoardRepositoryTest {
 
     @Test
     public void queryMethodeTest() {
+        List<Board> list1 = boardRepository.findList();
+        list1.forEach(System.out::println);
         // List<Board> list1 = boardRepository.findByTitle("Title");
         // System.out.println("findByTitle :" + list1.size());
+        // List<Board> list2 = boardRepository.findByWriter("user");
+        // System.out.println("findByWriter :" + list2.size());
         // List<Board> list2 = boardRepository.findByTitleStartingWith("Title");
         // System.out.println("findByTitleStartingWith :" + list2.size());
         // List<Board> list3 = boardRepository.findByTitleEndingWith("Title");
@@ -94,11 +98,12 @@ public class BoardRepositoryTest {
         // List<Board> list10 = boardRepository.findByIdGreaterThanOrderByIdDesc(50L);
         // System.out.println("findByIdGreaterThanOrderByIdDesc :" + list10.size());
 
-        Pageable pageable = PageRequest.of(0, 10);
+        // Pageable pageable = PageRequest.of(0, 10);
 
-        List<Board> list1 = boardRepository.findByIdGreaterThanOrderByIdDesc(50L, pageable);
+        // List<Board> list1 = boardRepository.findByIdGreaterThanOrderByIdDesc(50L,
+        // pageable);
 
-        list1.forEach(System.out::println);
+        // list1.forEach(System.out::println);
 
     }
 }
