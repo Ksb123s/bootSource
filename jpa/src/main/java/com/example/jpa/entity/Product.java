@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
+@Entity
 @Table(name = "jpql_product")
 public class Product {
-    @SequenceGenerator(name = "jpql_productr_seq_gen", sequenceName = "jpql_product_seq", allocationSize = 1)
+    @SequenceGenerator(name = "jpql_product_seq_gen", sequenceName = "jpql_product_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpql_product_seq_gen")
     @Id
     private Long id;

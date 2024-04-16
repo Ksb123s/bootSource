@@ -13,22 +13,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString(exclude = "parent")
-@Setter
 @Getter
+@Setter
 @Entity
 public class Child {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
 
     @ManyToOne
     private Parent parent;
+
 }

@@ -1,22 +1,20 @@
 package com.example.jpa.repository;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.jpa.entity.Memo;
+import java.util.List;
 
 // <Entity,Entity 에서 기본키 타입>
 public interface MemoRepository extends JpaRepository<Memo, Long> {
     // DAO 역할
-    // Mno 가 5보다 작은
+
+    // mno 가 5보다 작은 메모 조회
     List<Memo> findByMnoLessThan(Long mno);
 
-    // Mno 가 10보다 작은(내림차순)
+    // mno 가 10보다 작은 메모 조회(mno 내림차순)
     List<Memo> findByMnoLessThanOrderByMnoDesc(Long mno);
 
-    // Mno 가 10>=50 and <= 70
-    List<Memo> findByMnoBetween(Long mno, Long Mno);
-
+    // mno>=50 and mno <= 70 메모조회
+    List<Memo> findByMnoBetween(Long start, Long end);
 }

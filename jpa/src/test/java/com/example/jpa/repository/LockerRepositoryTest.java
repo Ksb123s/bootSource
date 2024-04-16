@@ -1,6 +1,5 @@
 package com.example.jpa.repository;
 
-import java.util.concurrent.locks.Lock;
 import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.Test;
@@ -22,13 +21,13 @@ public class LockerRepositoryTest {
     @Test
     public void insertTest() {
         // Locker 삽입
-        LongStream.range(1, 4).forEach(i -> {
-            Locker locker = Locker.builder().name("locker" + i).build();
-            lockerRepository.save(locker);
-        });
+        // LongStream.range(1, 4).forEach(i -> {
+        // Locker locker = Locker.builder().name("locker" + i).build();
+        // lockerRepository.save(locker);
+        // });
 
         // SportsMember 삽입
-        LongStream.range(4, 10).forEach(i -> {
+        LongStream.range(4, 7).forEach(i -> {
             SportsMember sportsMember = SportsMember.builder().name("user" + i).locker(Locker.builder().id(i).build())
                     .build();
             sportsMemberRepository.save(sportsMember);
@@ -38,7 +37,6 @@ public class LockerRepositoryTest {
     @Test
     public void updateTest() {
         SportsMember sportsMember = sportsMemberRepository.findById(6L).get();
-
         sportsMember.setName("홍길동");
         sportsMemberRepository.save(sportsMember);
     }
@@ -54,10 +52,11 @@ public class LockerRepositoryTest {
 
     @Test
     public void readTest2() {
-        // 락커 조회 후 회원 정보 조회
+        // locker 조회 후 회원 정보 조회
         Locker locker = lockerRepository.findById(1L).get();
         System.out.println(locker);
-        System.out.println("회원 아이디 " + locker.getSportsMember().getId());
-        System.out.println("회원 명 " + locker.getSportsMember().getName());
+        System.out.println("회원아이디 " + locker.getSportsMember().getId());
+        System.out.println("회원명 " + locker.getSportsMember().getName());
+
     }
 }

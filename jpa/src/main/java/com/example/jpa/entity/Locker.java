@@ -1,5 +1,7 @@
 package com.example.jpa.entity;
 
+import com.fasterxml.jackson.databind.JsonSerializable.Base;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -3,12 +3,12 @@ package com.example.jpa.repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.LongStream;
-import org.springframework.data.domain.Pageable;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.example.jpa.entity.Board;
 
@@ -64,46 +64,54 @@ public class BoardRepositoryTest {
     }
 
     @Test
-    public void queryMethodeTest() {
-        List<Board> list1 = boardRepository.findList();
-        list1.forEach(System.out::println);
-        // List<Board> list1 = boardRepository.findByTitle("Title");
-        // System.out.println("findByTitle :" + list1.size());
-        // List<Board> list2 = boardRepository.findByWriter("user");
-        // System.out.println("findByWriter :" + list2.size());
-        // List<Board> list2 = boardRepository.findByTitleStartingWith("Title");
-        // System.out.println("findByTitleStartingWith :" + list2.size());
-        // List<Board> list3 = boardRepository.findByTitleEndingWith("Title");
-        // System.out.println("findByTitleEndingWith :" + list3.size());
-        // List<Board> list4 = boardRepository.findByTitleContaining("Title");
-        // System.out.println("findByTitleContaining :" + list4.size());
-        // List<Board> list5 = boardRepository.findByTitleLike("Title");
-        // System.out.println("findByTitleLike :" + list5.size());
+    public void queryMethodTest() {
 
-        // List<Board> list6 = boardRepository.findByWriterStartingWith("user");
-        // System.out.println("findByWriterStartingWith :" + list6.size());
+        List<Board> list = boardRepository.findList();
+        System.out.println("findByTitle " + list.size());
 
-        // List<Board> list7 = boardRepository.findByTitleContainingOrContent("Title",
+        // where b1_0.title=?
+        // List<Board> list = boardRepository.findByTitle("Title");
+        // System.out.println("findByTitle " + list.size());
+
+        // where b1_0.title like ? escape '\'
+        // list = boardRepository.findByTitleLike("Title");
+        // System.out.println("findByTitleLike " + list.size());
+        // // Title%
+        // list = boardRepository.findByTitleStartingWith("Title");
+        // System.out.println("findByTitleStartingWith " + list.size());
+        // // %Title
+        // list = boardRepository.findByTitleEndingWith("Title");
+        // System.out.println("findByTitleEndingWith " + list.size());
+        // // %Title%
+        // list = boardRepository.findByTitleContaining("Title");
+        // System.out.println("findByTitleContaining " + list.size());
+
+        // list = boardRepository.findByWriterStartingWith("user");
+        // System.out.println("findByWriterStartingWith " + list.size());
+
+        // list.forEach(System.out::println);
+
+        // b1_0.title like ? escape '\' or b1_0.content=?
+        // List<Board> list = boardRepository.findByTitleContainingOrContent("Title",
         // "Content");
-        // System.out.println("findByTitleContainingOrContent :" + list7.size());
-        // List<Board> list8 =
-        // boardRepository.findByTitleContainingOrContentContaining("Title", "Content");
-        // System.out.println("findByTitleContainingOrContentContaining :" +
-        // list8.size());
+        // System.out.println("findByTitleContainingOrContent " + list.size());
 
-        // List<Board> list9 =
-        // boardRepository.findByTitleContainingAndIdGreaterThan("Title", 50L);
-        // System.out.println("findByTitleContainingAndIdGreaterThan :" + list9.size());
+        // b1_0.title like ? escape '\' or b1_0.content like ?
+        // list = boardRepository.findByTitleContainingOrContentContaining("Title",
+        // "Content");
+        // System.out.println("findByTitleContainingOrContentContaining " +
+        // list.size());
 
-        // List<Board> list10 = boardRepository.findByIdGreaterThanOrderByIdDesc(50L);
-        // System.out.println("findByIdGreaterThanOrderByIdDesc :" + list10.size());
+        // list = boardRepository.findByTitleContainingAndIdGreaterThan("Title", 50L);
+        // System.out.println("findByTitleContainingAndIdGreaterThan " + list.size());
 
-        // Pageable pageable = PageRequest.of(0, 10);
+        // list = boardRepository.findByIdGreaterThanOrderByIdDesc(50L);
+        // System.out.println("GreaterThanOrderByIdDesc " + list.size());
 
-        // List<Board> list1 = boardRepository.findByIdGreaterThanOrderByIdDesc(50L,
-        // pageable);
-
-        // list1.forEach(System.out::println);
-
+        // // PageRequest.of(페이지번호, 게시물 수); 페이지번호 0 부터 시작
+        // Pageable pageable = PageRequest.of(1, 10);
+        // list = boardRepository.findByIdGreaterThanOrderByIdDesc(0L, pageable);
+        // list.forEach(System.out::println);
     }
+
 }

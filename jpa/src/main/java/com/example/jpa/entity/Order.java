@@ -16,15 +16,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @ToString(exclude = { "member2", "product" })
+@Builder
+@AllArgsConstructor
+@Setter
+@Getter
+@NoArgsConstructor
 @Table(name = "jpql_order")
 @Entity
 public class Order {
+
     @SequenceGenerator(name = "jpql_order_seq_gen", sequenceName = "jpql_order_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpql_order_seq_gen")
     @Id
@@ -34,8 +35,9 @@ public class Order {
     private Member2 member2;
 
     @Embedded
-    private Address homAddress;
+    private Address homeAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
+
 }

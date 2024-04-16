@@ -47,5 +47,4 @@ public class Member2 {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Team2 team2;
-
 }
