@@ -248,3 +248,25 @@ QueryDSL
 
     Querydsl - QuerydslPredicateExecutor    
              - 사용자 정의 인터페이스 설계 후 QueryDslRepositorySupport
+
+
+
+
+회원제 계시판
+
+회원 
+게시글 
+댓글
+
+게시글: 회원 =>  n : 1 (Many to one)
+한명의 회원은 여러개의 게시글을 작성
+하나의 게시글은 한명의 회원 작성
+
+댓글:게시글 => n : 1 (many to one)
+게시글:댓글 => 1 : n (one to many)
+하나의 게시글에는 여러 개의 댓글이 작성된다.
+하나의 댓글은 하나의 게시글에 속한다.
+
+
+프로젝트 80시간동안 만글기
+
