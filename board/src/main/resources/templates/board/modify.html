@@ -29,16 +29,16 @@
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-primary">Modify</button>
-              <a th:href="@{list}" class="btn btn-success">List</a>
+              <a th:href="@{list(page=${requestDto.page},type=${requestDto.type},keyword=${requestDto.keyword})}" class="btn btn-success">List</a>
               <button type="button" class="btn btn-danger">Remove</button>
             </div>
             
           </form>
           <form th:action="@{remove}" method="post" id="actionForm">
             <input type="hidden" name="bno" th:value="${dto.bno}">
-            <input type="hidden" name="page" >
-            <input type="hidden" name="type" >
-            <input type="hidden" name="keyword" >
+            <input type="hidden" name="page" th:value="${requestDto.page}" >
+            <input type="hidden" name="type" th:value="${requestDto.type}">
+            <input type="hidden" name="keyword" th:value="${requestDto.keyword}">
           </form>
         </div>
       </div>

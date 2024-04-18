@@ -66,16 +66,16 @@ public class BoardRepositoryTest {
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
 
-        // Page<Object[]> list = boardRepository.list(pageable);
-        // for (Object[] objects : list) {
-        // System.out.println(Arrays.toString(objects));
-        // Board board = (Board) objects[0];
-        // Member member = (Member) objects[1];
-        // Long reply = (Long) objects[2];
+        Page<Object[]> list = boardRepository.list("tcw", "title", pageable);
+        for (Object[] objects : list) {
+            System.out.println(Arrays.toString(objects));
+            Board board = (Board) objects[0];
+            Member member = (Member) objects[1];
+            Long reply = (Long) objects[2];
 
-        // System.out.println(board + " " + member + " " + reply);
+            System.out.println(board + " " + member + " " + reply);
 
-        // }
+        }
     }
 
     @Test

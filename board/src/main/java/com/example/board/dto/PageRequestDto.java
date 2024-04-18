@@ -22,6 +22,8 @@ public class PageRequestDto {
     public PageRequestDto() {
         this.page = 1;
         this.size = 10;
+        this.keyword = "";
+        this.type = "";
     }
 
     // 스프링 페이지 나누기 정보 저장 객체 => pageable

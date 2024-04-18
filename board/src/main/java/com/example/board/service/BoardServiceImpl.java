@@ -2,6 +2,7 @@ package com.example.board.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import com.example.board.dto.PageResultDto;
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
 import com.example.board.repository.BoardRepository;
+import com.example.board.repository.MemberRepository;
 import com.example.board.repository.ReplyRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public PageResultDto<BoardDto, Object[]> getList(PageRequestDto requestDto) {
@@ -67,6 +70,24 @@ public class BoardServiceImpl implements BoardService {
     public void deleteWithReply(Long bno) {
         replyRepository.deleteByBno(bno);
         boardRepository.deleteById(bno);
+
+    }
+
+    @Override
+    public Long createBoard(BoardDto dto) {
+
+        Optional<Member> member = memberRepository.findById(dto.getWriterEmail());
+        if (member.isPresent()) {
+            Board board = Board.builder()
+                    .title(dto.getTitle())
+                    .content(dto.getContent())
+                    .writer(member.get())
+                    .build();
+            boardRepository.save(board);
+            return board.getBno();
+        }
+
+        return null;
 
     }
 

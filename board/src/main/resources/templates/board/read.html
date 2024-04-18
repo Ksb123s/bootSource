@@ -28,21 +28,21 @@
                 <input type="text" name="updategDate" id="updategDate" class="form-control"readonly th:value="${#temporals.format(dto.lastModifiedDate, 'yyyy-MM-dd')}" />
               </div>
               <div class="form-group">
-                <a th:href="@{modify(bno=${dto.bno})}"  class="btn btn-primary">Modify</a>
+                <a th:href="@{modify(bno=${dto.bno},page=${requestDto.page},type=${requestDto.type},keyword=${requestDto.keyword})}"  class="btn btn-primary">Modify</a>
                 <a th:href="@{list(page=${requestDto.page},type=${requestDto.type},keyword=${requestDto.keyword})}" class="btn btn-success">List</a>
               </div>
               <input type="hidden" name="bno" th:value="${dto.bno}" />
             </form>
           </div>
-          <div class="card-body mt-3">
-            <div class="input-group mb-3">
+          <div class="card-body mt-3 border">
+            <div class="input-group mb-3 mt-5 ">
               <span class="input-group-text" id="writer">작성자</span>
               <input type="text" class="form-control" placeholder="작성자" aria-label="Username" aria-describedby="writer">
             </div>
-            <div class="input-group">
+            <div class="input-group mb-4 ">
               <span class="input-group-text">댓글</span>
               <textarea class="form-control " aria-label="With textarea" rows="3" placeholder="댓글내용"></textarea>
-              <button type="button" class=""></button>
+              <button type="button" class="btn btn-outline-secondary">등록</button>
             </div>
           </div>
 

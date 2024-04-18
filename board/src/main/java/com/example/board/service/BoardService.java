@@ -18,6 +18,8 @@ public interface BoardService {
 
     void deleteWithReply(Long bno);
 
+    Long createBoard(BoardDto dto);
+
     // entity => dto
     public default BoardDto entityToDto(Board board, Member member, Long replyCount) {
 
