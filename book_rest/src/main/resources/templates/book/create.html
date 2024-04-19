@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
   <div layout:fragment="content" class="container mt-5">
     <h3>도서 추가</h3>
-    <form action="" method="post" th:object="${bookDto}" id="form" novalidate>
+    <form action="" method="post" th:object="${bookDto}" id="form" novalidate enctype="application/x-www-form-urlencoded">
       <div class="mb-3 row">
         <label for="category" class="col-sm-2 col-form-label">분류</label>
         <div class="col-sm-10">
