@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RequiredArgsConstructor
 @RequestMapping("/replies")
@@ -55,8 +56,17 @@ public class ReplyControllor {
     }
 
     @GetMapping("/{rno}")
-    public ResponseEntity<ReplyDto> getMethodName(@PathVariable("rno") Long rno) {
+    public ResponseEntity<ReplyDto> getRow(@PathVariable("rno") Long rno) {
         return new ResponseEntity<ReplyDto>(service.getReply(rno), HttpStatus.OK);
+    }
+
+    @PutMapping("/{rno}")
+    public ResponseEntity<String> putMethodName(@PathVariable("rno") Long rno, @RequestBody ReplyDto dto) {
+
+        log.info("reply 수정 요청 {}, {}", rno, dto);
+
+        Long Rno = service.update(dto);
+        return new ResponseEntity<String>(String.valueOf(rno), HttpStatus.OK);
     }
 
 }

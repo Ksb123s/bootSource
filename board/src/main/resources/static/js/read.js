@@ -6,6 +6,7 @@
 //  1. function getReplies() {}  실행 getReplies(); 호이스팅 가능
 //  2. const(or let) 이름 = () =>{} 호이스팅 불가
 
+const replyList = document.querySelector(".replyList");
 // 호이스팅
 // 선언 하지 않고 먼저 호출후 선언
 
@@ -48,36 +49,62 @@ const replies = () => {
 };
 replies();
 // 새 댓글 등록
+const rno1 = document.querySelector("#rno");
 document.querySelector("#reply_form").addEventListener("submit", (e) => {
   e.preventDefault();
+
   const data = {
     bno: bno,
     replyer: document.querySelector("#replyer").value,
     text: document.querySelector("#text").value,
+    rno: rno1.value,
   };
-  fetch(`/replies/new`, {
-    method: "post",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.text())
-    .then((data) => {
-      console.log(data);
-      if (data) {
-        alert(data + "번 댓글 등록 완료");
-        document.querySelector("#replyer").value = "";
-        document.querySelector("#text").value = "";
-        replies();
-        // location.href = `/board/read?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`;
-      }
-    });
+
+  if (!rno.value) {
+    //새댓글 등록
+    fetch(`/replies/new`, {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data);
+        if (data) {
+          alert(data + "번 댓글 등록 완료");
+          document.querySelector("#replyer").value = "";
+          document.querySelector("#text").value = "";
+          rno1.value = "";
+          replies();
+          // location.href = `/board/read?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`;
+        }
+      });
+  } else {
+    // 수정
+    fetch(`/replies/${rno.value}`, {
+      method: "put",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data);
+        if (data) {
+          alert(data + "번 댓글 수정 완료");
+          document.querySelector("#replyer").value = "";
+          document.querySelector("#text").value = "";
+          replies();
+          // location.href = `/board/read?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`;
+        }
+      });
+  }
 });
 
 // 삭제 버튼 클릭시 rno 가저오기
-
-const replyList = document.querySelector(".replyList");
 
 //
 
@@ -87,32 +114,27 @@ replyList.addEventListener("click", (e) => {
   const rno = btn.closest(".reply-row").dataset.rno;
 
   if (btn.innerHTML == "삭제") {
-    fetch(`/replies/${rno}`, { method: "delete" })
-      .then((response) => response.text())
-      .then((data) => {
-        if (data == "success") {
-          alert("삭제 성공");
-          replies();
-        }
-      });
+    if (confirm("삭제 하시겠습니까?") == true) {
+      fetch(`/replies/${rno}`, { method: "delete" })
+        .then((response) => response.text())
+        .then((data) => {
+          if (data == "success") {
+            alert("삭제 성공");
+            replies();
+          }
+        });
+    }
   }
   if (btn.innerHTML == "수정") {
-    const replyData = {
-      text: "",
-    };
-
-    fetch(`/replies/modify/${rno}`, {
-      method: "put",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data), //JSON.stringify() javascript 객체 => JSON 객체 변경
-    })
-      .then((response) => response.text())
+    fetch(`/replies/${rno}`, { method: "get" })
+      .then((response) => response.json())
       .then((data) => {
-        if (data == "success") {
-          alert("수정 성공");
-        }
+        console.log(data);
+
+        document.querySelector("#replyer").value = data.replyer;
+        document.querySelector("#text").value = data.text;
+        document.querySelector("#bno").value = data.bno;
+        rno1.value = data.rno;
       });
   }
 });

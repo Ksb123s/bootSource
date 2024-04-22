@@ -47,4 +47,16 @@ public class ReplyServiceImpl implements ReplyService {
         return entityToDto(replyRepository.findById(rno).get());
     }
 
+    @Override
+    public Long update(ReplyDto dto) {
+        Reply reply = replyRepository.findById(dto.getRno()).get();
+
+        reply.setText(dto.getText());
+
+        Reply reply2 = replyRepository.save(reply);
+
+        return reply2.getRno();
+
+    }
+
 }
