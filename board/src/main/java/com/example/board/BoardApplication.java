@@ -8,6 +8,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class BoardApplication {
 
+	// role : member, admin
+
+	// /, /board/list, /board/read 전체 접근 가능
+
 	public static void main(String[] args) {
 		SpringApplication.run(BoardApplication.class, args);
 	}

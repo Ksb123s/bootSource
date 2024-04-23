@@ -12,7 +12,7 @@ import com.example.club.entity.ClubMember;
 public interface ClubMemberRepository extends JpaRepository<ClubMember, String> {
 
     // 회원 찾기(email, social 회원 여부)
-    @EntityGraph(attributePaths = { "rolSet" }, type = EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = { "roleSet" }, type = EntityGraphType.LOAD)
     @Query("SELECT m FROM ClubMember m WHERE m.email = :email And m.fromSocial = :social")
     Optional<ClubMember> findByEmailAndFromSocial(String email, boolean social);
 

@@ -32,9 +32,10 @@ public class ClubMember extends BaseEntity {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
-    private Set<ClubMemberRole> rolSet = new HashSet<>();
+    private Set<ClubMemberRole> roleSet = new HashSet<>();
 
     public void addMemberRole(ClubMemberRole memberRole) {
-        rolSet.add(memberRole);
+        roleSet.add(memberRole);
     }
+
 }
