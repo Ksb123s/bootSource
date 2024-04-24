@@ -41,8 +41,9 @@
             th:value="${#temporals.format(dto.lastModifiedDate, 'yyyy-MM-dd')}"
           />
         </div>
+        <!-- 수정버튼은 로그인사용자 == 글작성자 -->
         <div class="form-group">
-          <a th:href="@{modify(bno=${dto.bno},page=${requestDto.page},type=${requestDto.type},keyword=${requestDto.keyword})}" class="btn btn-primary"
+          <a th:if="${dto.writerEmail} == ${#authentication.name}" th:href="@{modify(bno=${dto.bno},page=${requestDto.page},type=${requestDto.type},keyword=${requestDto.keyword})}" class="btn btn-primary"
             >Modify</a
           >
           <a th:href="@{list(page=${requestDto.page},type=${requestDto.type},keyword=${requestDto.keyword})}" class="btn btn-success">List</a>
@@ -53,19 +54,20 @@
     <!-- 댓글 폼 영역 -->
     <div class="mt-5">
       <hr />  
-      <div class="border p-4">
-        <form action="" method="post" id="reply_form">
+      <div class="border p-4" sec:authorize="hasRole('ROLE_MEMBER')" >
+        <form th:action="@{/replies/new}" method="post" id="reply_form">
           <input type="hidden" name="bno" id="bno" th:value="${dto.bno}" />
           <input type="hidden" name="rno" id="rno" value="" />
           <div class="input-group mb-3">
             <span class="input-group-text">작성자</span>
-            <input type="text" name="replyer" id="replyer" class="form-control" placeholder="작성자를 입력해주세요" />
+            <input type="text" name="writerName" id="writerName" class="form-control" readonly th:value="${#authentication.principal.memberDto.name  }"/>
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text">댓글</span>
             <textarea rows="3" name="text" id="text" class="form-control" placeholder="댓글 내용을 입력해 주세요"></textarea>
             <button type="submit" class="btn btn-outline-secondary">등록</button>
           </div>
+          <input type="hidden" name="writerEmail" id="writerEmail" th:value="${#authentication.name}"/>
         </form>
       </div>
       <!-- 댓글 리스트 -->
@@ -109,6 +111,8 @@
       const page = "[[${requestDto.page}]]";
       const type = "[[${requestDto.type}]]";
       const keyword = "[[${requestDto.keyword}]]";
+      const csrfValue ="[[${_csrf.token}]]";
+      const authen = "[[${#authentication.name}]]"
     </script>
     <script th:src="@{/js/read.js}"></script>
   </th:block>

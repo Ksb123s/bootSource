@@ -25,5 +25,13 @@
     </div>
      </div>
   </div>
-
+  <th:block layout:fragment="script">
+    <script>
+      // bno 가져오기
+      const msg = "[[${msg}]]";
+      if (msg) {
+        alert(msg)
+      }
+    </script>
+  </th:block>
 </html>

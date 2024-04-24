@@ -32,8 +32,8 @@ public class BoardRepositoryTest {
     @Test
     public void insertTest() {
 
-        IntStream.rangeClosed(1, 100).forEach(i -> {
-            Member member = Member.builder().email("user" + i + "@gamil.com").build();
+        IntStream.rangeClosed(1, 10).forEach(i -> {
+            Member member = Member.builder().email("user" + i + "@naver.com").build();
 
             Board board = Board.builder()
                     .title("title" + i)

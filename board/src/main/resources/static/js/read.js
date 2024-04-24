@@ -37,12 +37,15 @@ const replies = () => {
         result += ` <div class="d-flex justify-content-between my-2 border-bottom reply-row" data-rno="${reply.rno}">`;
         result += `<div class="p-3"><img src="/img/default.png" alt="" class="rounded-circle mx-auto d-block" style="width: 60px; height: 60px" /></div>`;
         result += `<div class="flex-grow-1 align-self-center">`;
-        result += `<div>${reply.replyer}</div>`;
+        result += `<div>${reply.writerName}</div>`;
         result += `<div><span class="fx-5">${reply.text}</span></div>`;
         result += `<div class="text-muted"><span class="small">${formatDate(reply.createDate)}</span></div></div>`;
         result += `<div class="d-flex flex-column align-self-center">`;
-        result += `<div class="mb-2"><button class="btn btn-outline-danger btn-sm">삭제</button></div>`;
-        result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div></div></div>`;
+        if (`${reply.writerEmail}` == `${authen}`) {
+          result += `<div class="mb-2" ><button class="btn btn-outline-danger btn-sm">삭제</button></div>`;
+          result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div>`;
+        }
+        result += `</div></div>`;
         replyList.innerHTML = result;
       });
     });
@@ -50,59 +53,63 @@ const replies = () => {
 replies();
 // 새 댓글 등록
 const rno1 = document.querySelector("#rno");
-document.querySelector("#reply_form").addEventListener("submit", (e) => {
-  e.preventDefault();
+const replyForm = document.querySelector("#reply_form");
+if (replyForm) {
+  replyForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  const data = {
-    bno: bno,
-    replyer: document.querySelector("#replyer").value,
-    text: document.querySelector("#text").value,
-    rno: rno1.value,
-  };
+    const data = {
+      bno: bno,
+      writerName: document.querySelector("#writerName").value,
+      writerEmail: document.querySelector("#writerEmail").value,
+      text: document.querySelector("#text").value,
+      rno: rno1.value,
+    };
 
-  if (!rno.value) {
-    //새댓글 등록
-    fetch(`/replies/new`, {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.text())
-      .then((data) => {
-        console.log(data);
-        if (data) {
-          alert(data + "번 댓글 등록 완료");
-          document.querySelector("#replyer").value = "";
-          document.querySelector("#text").value = "";
-          rno1.value = "";
-          replies();
-          // location.href = `/board/read?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`;
-        }
-      });
-  } else {
-    // 수정
-    fetch(`/replies/${rno.value}`, {
-      method: "put",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.text())
-      .then((data) => {
-        console.log(data);
-        if (data) {
-          alert(data + "번 댓글 수정 완료");
-          document.querySelector("#replyer").value = "";
-          document.querySelector("#text").value = "";
-          replies();
-          // location.href = `/board/read?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`;
-        }
-      });
-  }
-});
+    if (!rno1.value) {
+      //새댓글 등록
+      fetch(`/replies/new`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+          "X-CSRF-TOKEN": csrfValue,
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          console.log(data);
+          if (data) {
+            alert(data + "번 댓글 등록 완료");
+            document.querySelector("#text").value = "";
+            rno1.value = "";
+            replies();
+            // location.href = `/board/read?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`;
+          }
+        });
+    } else {
+      // 수정
+      fetch(`/replies/${rno1.value}`, {
+        method: "put",
+        headers: {
+          "content-type": "application/json",
+          "X-CSRF-TOKEN": csrfValue,
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          console.log(data);
+          if (data) {
+            alert(data + "번 댓글 수정 완료");
+            document.querySelector("#text").value = "";
+            replies();
+            // location.href = `/board/read?bno=${bno}&page=${page}&type=${type}&keyword=${keyword}`;
+          }
+        });
+    }
+  });
+}
 
 // 삭제 버튼 클릭시 rno 가저오기
 
@@ -115,7 +122,12 @@ replyList.addEventListener("click", (e) => {
 
   if (btn.innerHTML == "삭제") {
     if (confirm("삭제 하시겠습니까?") == true) {
-      fetch(`/replies/${rno}`, { method: "delete" })
+      fetch(`/replies/${rno}`, {
+        method: "delete",
+        headers: {
+          "X-CSRF-TOKEN": csrfValue,
+        },
+      })
         .then((response) => response.text())
         .then((data) => {
           if (data == "success") {
@@ -131,7 +143,7 @@ replyList.addEventListener("click", (e) => {
       .then((data) => {
         console.log(data);
 
-        document.querySelector("#replyer").value = data.replyer;
+        document.querySelector("#writerName").value = data.writerName;
         document.querySelector("#text").value = data.text;
         document.querySelector("#bno").value = data.bno;
         rno1.value = data.rno;

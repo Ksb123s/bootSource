@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.board.entity.Board;
+import com.example.board.entity.Member;
 import com.example.board.entity.Reply;
 import com.example.board.repository.ReplyRepository;
 
@@ -23,13 +24,15 @@ public class ReplyRepositoryTest {
     public void insertTest() {
 
         IntStream.rangeClosed(1, 100).forEach(i -> {
-            long bno = (long) (Math.random() * 100);
+            long bno = (long) (Math.random() * 100) + 1;
 
             Board board = Board.builder().bno(bno).build();
 
+            Member member = Member.builder().email("user" + (i % 10) + "@naver.com").build();
+
             Reply reply = Reply.builder()
                     .text("Reply..." + i)
-                    .replyer("geust" + i)
+                    .replyer(member)
                     .board(board)
                     .build();
             replyRepository.save(reply);

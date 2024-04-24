@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class ReplyControllor {
     }
 
     // replies/new
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/new")
     public ResponseEntity<Long> postMethodName(@RequestBody ReplyDto dto) {
         log.info("댓글 등록 {}", dto);
@@ -47,6 +49,7 @@ public class ReplyControllor {
         return new ResponseEntity<Long>(service.create(dto), HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{rno}")
     public ResponseEntity<String> deleteReply(@PathVariable("rno") Long rno) {
         log.info("댓글 제거 {} ", rno);
@@ -60,6 +63,7 @@ public class ReplyControllor {
         return new ResponseEntity<ReplyDto>(service.getReply(rno), HttpStatus.OK);
     }
 
+    @PreAuthorize("authentication.name == #dto.writerEmail")
     @PutMapping("/{rno}")
     public ResponseEntity<String> putMethodName(@PathVariable("rno") Long rno, @RequestBody ReplyDto dto) {
 
