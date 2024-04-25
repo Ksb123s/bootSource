@@ -45,16 +45,15 @@ public class MemberController {
 
     @PostMapping("/register")
     public String postRegister(@Valid MemberDto dto, BindingResult result,
-            @ModelAttribute("requestDto") PageRequestDto requestDto, Model model) {
+            @ModelAttribute("requestDto") PageRequestDto requestDto, RedirectAttributes rttr) {
         if (result.hasErrors()) {
             return "member/register";
         }
 
         String msg = service.register(dto);
-        log.info(msg);
         if (!msg.equals("success")) {
-            model.addAttribute("msg", msg);
-            return "member/register";
+            rttr.addFlashAttribute("msg", msg);
+            return "redirect:/member/register";
         }
 
         return "redirect:/member/login";

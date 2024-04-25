@@ -3,6 +3,7 @@
     <h2>회원가입</h2>
     <div class="card-body">
       <form th:action="@{register}" method="post" th:object="${memberDto}" novalidate>
+        <div class="alert alert-danger" th:if="${msg}">[[${msg}]]</div>
         <div class="form-group mb-2">
           <label for="email" class="form-label">이메일</label>
           <input type="email" name="email" id="email" class="form-control" th:value="${memberDto.email}" />
@@ -25,13 +26,5 @@
     </div>
      </div>
   </div>
-  <th:block layout:fragment="script">
-    <script>
-      // bno 가져오기
-      const msg = "[[${msg}]]";
-      if (msg) {
-        alert(msg)
-      }
-    </script>
-  </th:block>
+
 </html>

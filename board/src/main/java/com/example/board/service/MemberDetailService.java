@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.board.constant.MemberRole;
 import com.example.board.dto.MemberAuthDto;
 import com.example.board.dto.MemberDto;
 import com.example.board.entity.Member;
@@ -52,23 +53,20 @@ public class MemberDetailService implements UserDetailsService, MemberService {
         try {
             validateDuplicationMember(insertDto.getEmail());
         } catch (Exception e) {
-
-            e.printStackTrace();
-            String error = e.getMessage();
-            return error;
+            return e.getMessage();
         }
 
         Member member = Member.builder()
                 .email(insertDto.getEmail())
                 .name(insertDto.getName())
                 .password(passwordEncoder.encode(insertDto.getPassword()))
-                .memberRole(insertDto.getMemberRole().MEMBER)
+                .memberRole(MemberRole.MEMBER)
                 .build();
         memberRepository.save(member);
         return "success";
     }
 
-    private void validateDuplicationMember(String email) {
+    private void validateDuplicationMember(String email) throws Exception {
         Optional<Member> result = memberRepository.findById(email);
         if (result.isPresent())
             throw new IllegalStateException("이미 가입된 회원입니다.");

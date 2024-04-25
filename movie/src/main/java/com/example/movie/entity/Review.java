@@ -1,4 +1,4 @@
-package com.example.board.entity;
+package com.example.movie.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,27 +14,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString(exclude = "writer")
-@Builder
+@Entity
 @Setter
 @Getter
-@Entity
-public class Board extends BaseEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString(exclude = { "member", "movie" })
+public class Review extends BaseEntity {
 
-        @SequenceGenerator(name = "board_seq_gen", sequenceName = "board_seq", allocationSize = 1)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_seq_gen")
+    @SequenceGenerator(name = "review_seq_gen", sequenceName = "review_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_seq_gen")
     @Id
-    private Long bno;
+    private Long reviewNo;
 
-    private String title;
+    private int grade;
 
-    private String content;
+    private String text;
 
-    // @ManyToOne : fetch 방식이 즉시 로딩 (FETCHTYPE.EAGER)
-    // - left-join 방식으로 데이터 처리
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member writer;
+    private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Movie movie;
 }
