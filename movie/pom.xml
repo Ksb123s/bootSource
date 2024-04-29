@@ -17,7 +17,14 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-				<dependency>
+<!-- 썸네일 이미지 자동 완성 -->
+<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.20</version>
+		</dependency>
+		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
 			<version>5.0.0</version>
