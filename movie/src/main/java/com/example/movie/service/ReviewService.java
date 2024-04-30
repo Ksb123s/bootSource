@@ -1,0 +1,46 @@
+package com.example.movie.service;
+
+import java.util.List;
+
+import com.example.movie.dto.ReviewDto;
+import com.example.movie.entity.Member;
+import com.example.movie.entity.Movie;
+import com.example.movie.entity.Review;
+
+public interface ReviewService {
+
+    // 특정 영화의 모든 리뷰 가져오기
+    List<ReviewDto> getListOfMovie(Long mno);
+
+    public default ReviewDto entityToDto(Review review) {
+
+        return ReviewDto.builder()
+                .reviewNo(review.getReviewNo())
+                .grade(review.getGrade())
+                .text(review.getText())
+                .createdDate(review.getCreatedDate())
+                .lastModifiedDate(review.getLastModifiedDate())
+                .mid(review.getMember().getMid())
+                .nickname(review.getMember().getNickname())
+                .email(review.getMember().getEmail())
+                .mno(review.getMovie().getMno())
+                .build();
+
+    }
+
+    public default Review dtoToEntity(ReviewDto reviewdDto) {
+        Movie movie = Movie.builder().mno(reviewdDto.getMno()).build();
+        Member member = Member.builder().mid(reviewdDto.getMid())
+                .nickname(reviewdDto.getNickname())
+                .email(reviewdDto.getEmail())
+                .build();
+        return Review.builder()
+                .reviewNo(reviewdDto.getReviewNo())
+                .grade(reviewdDto.getGrade())
+                .text(reviewdDto.getText())
+                .member(member)
+                .movie(movie)
+                .build();
+    }
+
+}

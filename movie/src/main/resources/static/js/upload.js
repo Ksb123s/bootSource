@@ -55,3 +55,26 @@ input.addEventListener("change", (e) => {
       showUploadImages(data);
     });
 });
+
+const form = document.querySelector("#register-form");
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const liList = document.querySelectorAll(".uploadResult ul li");
+  console.log(liList);
+
+  //   수집된 정보를 폼 태그에 붙여넣기
+  let result = "";
+  liList.forEach((i, idx) => {
+    // hidden 3 => MoveImageDto 객체 하나로 변경
+    // movieImageDtos dto 이름에 맞춰 설정
+    result += `<input type='hidden' value='${i.dataset.path}' name='movieImageDtos[${idx}].path'>`;
+    result += `<input type='hidden' value='${i.dataset.uuid}' name='movieImageDtos[${idx}].uuid'>`;
+    result += `<input type='hidden' value='${i.dataset.name}' name='movieImageDtos[${idx}].imgName'>`;
+  });
+  form.insertAdjacentHTML("beforeend", result);
+  console.log(form.innerHTML);
+
+  form.submit();
+});

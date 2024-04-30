@@ -1,6 +1,7 @@
 package com.example.movie.repository;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.movie.constant.MemberRole;
+import com.example.movie.dto.PageRequestDto;
 import com.example.movie.entity.Member;
 import com.example.movie.entity.Movie;
 import com.example.movie.entity.MovieImage;
@@ -109,12 +111,32 @@ public class MovieRepositoryTest {
     @Test
     public void movieImageListTest() {
 
-        PageRequest pageRequest = PageRequest.of(0, 10);
+        PageRequestDto pageRequest = PageRequestDto.builder()
+                .type("t")
+                .keyword("Movie")
+                .page(1)
+                .size(10)
+                .build();
 
-        Page<Object[]> list = movieImgRepository.getTotalList(pageRequest);
+        Page<Object[]> list = movieImgRepository.getTotalList(pageRequest.getType(), pageRequest.getKeyword(),
+                pageRequest.getPageable(Sort.by("mno").descending()));
 
         for (Object[] objects : list) {
             System.out.println(Arrays.toString(objects));
         }
+    }
+
+    @Transactional
+    @Test
+    public void testFindReview() {
+        Movie movie = Movie.builder().mno(198L).build();
+        List<Review> list = reviewRepository.findByMovie(movie);
+
+        list.forEach(review -> {
+            System.out.println(review);
+            System.out.println(review.getMember().getEmail());
+            System.out.println(review.getMember().getNickname());
+            System.out.println(review.getMember().getMid());
+        });
     }
 }

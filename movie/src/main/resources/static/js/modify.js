@@ -9,3 +9,15 @@ document.querySelector(".btn-danger").addEventListener("click", () => {
 
   actionForm.submit();
 });
+
+document.querySelector(".uploadResult").addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("x 버튼", e.target);
+  console.log("x 버튼", e.currentTarget);
+
+  const curentLi = e.target.closest("li");
+
+  if (confirm("삭제하시겠습니까?")) {
+    curentLi.remove();
+  }
+});
