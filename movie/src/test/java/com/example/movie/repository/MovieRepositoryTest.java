@@ -62,15 +62,22 @@ public class MovieRepositoryTest {
     @Test
     public void insertMemberTest() {
         // 영화 + 영화 이미지
-        IntStream.rangeClosed(1, 100).forEach(i -> {
-            Member member = Member.builder()
-                    .email("mem" + i + "@naver.com")
-                    .password(passwordEncoder.encode("1111"))
-                    .memberRole(MemberRole.MEMBER)
-                    .nickname("reviewer" + i)
-                    .build();
-            memberRepository.save(member);
-        });
+        // IntStream.rangeClosed(1, 100).forEach(i -> {
+        // Member member = Member.builder()
+        // .email("mem" + i + "@naver.com")
+        // .password(passwordEncoder.encode("1111"))
+        // .memberRole(MemberRole.MEMBER)
+        // .nickname("reviewer" + i)
+        // .build();
+        // memberRepository.save(member);
+        // });
+        Member member = Member.builder()
+                .email("admin1@naver.com")
+                .password(passwordEncoder.encode("1111"))
+                .memberRole(MemberRole.ADMIN)
+                .nickname("admin1")
+                .build();
+        memberRepository.save(member);
     }
 
     @Test

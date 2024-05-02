@@ -4,7 +4,7 @@ const uploadResult = document.querySelector(".uploadResult ul");
 
 function checkExtension(fileName) {
   // 정규식 사용
-  const regex = /(.*?).(png|gif|jpg)$/;
+  const regex = /(.*?).(png|gif|jpg|jpeg)$/;
   console.log(regex.test(fileName));
 
   return regex.test(fileName);

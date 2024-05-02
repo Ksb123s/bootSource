@@ -29,4 +29,35 @@ public class ReviewServiceImp implements ReviewService {
         return reviews.stream().map(review -> entityToDto(review)).collect(Collectors.toList());
     }
 
+    @Override
+    public Long addReview(ReviewDto reviewDto) {
+        Review review = dtoToEntity(reviewDto);
+
+        return reviewRepository.save(review).getReviewNo();
+
+    }
+
+    @Override
+    public void removeReview(Long reviewNo) {
+
+        reviewRepository.delete(reviewRepository.findById(reviewNo).get());
+    }
+
+    @Override
+    public ReviewDto getReview(Long reviewNo) {
+
+        return entityToDto(reviewRepository.findById(reviewNo).get());
+    }
+
+    @Override
+    public Long updateReview(ReviewDto reviewDto) {
+
+        Review review = reviewRepository.findById(reviewDto.getReviewNo()).get();
+
+        review.setGrade(reviewDto.getGrade());
+        review.setText(reviewDto.getText());
+
+        return reviewRepository.save(review).getReviewNo();
+    }
+
 }

@@ -12,6 +12,15 @@ public interface ReviewService {
     // 특정 영화의 모든 리뷰 가져오기
     List<ReviewDto> getListOfMovie(Long mno);
 
+    // 특정 영화의 리뷰 등록
+    Long addReview(ReviewDto reviewDto);
+
+    void removeReview(Long reviewNo);
+
+    ReviewDto getReview(Long reviewNo);
+
+    Long updateReview(ReviewDto reviewDto);
+
     public default ReviewDto entityToDto(Review review) {
 
         return ReviewDto.builder()
@@ -31,8 +40,6 @@ public interface ReviewService {
     public default Review dtoToEntity(ReviewDto reviewdDto) {
         Movie movie = Movie.builder().mno(reviewdDto.getMno()).build();
         Member member = Member.builder().mid(reviewdDto.getMid())
-                .nickname(reviewdDto.getNickname())
-                .email(reviewdDto.getEmail())
                 .build();
         return Review.builder()
                 .reviewNo(reviewdDto.getReviewNo())

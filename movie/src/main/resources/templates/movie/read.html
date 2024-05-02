@@ -6,7 +6,7 @@
   <div layout:fragment="content" class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200" th:text="${dto.title}"></h2>
 
-    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+       <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <form action="" method="post" id="">
         <label class="block text-sm">
           <span class="text-gray-700 dark:text-gray-400">제목</span>
@@ -90,13 +90,14 @@
       <!-- 리뷰 작성 폼-->
       <form action="" method="post" class="review-form">
         <input type="hidden" name="reviewNo" id="reviewNo" />
+        <input type="hidden" name="mid" id="mid" value="45" />
         <label class="block text-sm">
           <span class="text-gray-700 dark:text-gray-400">작성자</span>
           <input
             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
             placeholder="작성자"
-            name="mid"
-            id="mid"
+            name="nickname"
+            id="nickname"
           />
         </label>
         <label class="block text-sm mt-2">
@@ -115,7 +116,7 @@
           <div class="starrr"></div>
         </label>
         <div class="flex mt-6 text-sm">
-          <button type="button" class="btn btn-outline-danger btn-sm" style="--bs-btn-padding-y: 0.5rem; --bs-btn-padding-x: 1.5rem">
+          <button type="submit" class="btn btn-outline-danger btn-sm" style="--bs-btn-padding-y: 0.5rem; --bs-btn-padding-x: 1.5rem">
             리뷰 등록
           </button>
         </div>
@@ -188,6 +189,7 @@
       }
       </script>
       <script th:src="@{/js/read.js}"></script>
+      <script th:src="@{/js/review.js}"></script>
 
       <!-- 평점 처리-->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
