@@ -90,18 +90,18 @@ public class MovieServiceImpl implements MovieService {
     @Transactional
     @Override
     public Long movieInsert(MovieDto movieDto) {
+        // 영화정보 : title => Movie Entity
+        // 이미지 : MovieImage Entity
 
-        // 영화정보 : title => movie Entity
-        // 이미지 : movieImage Entity
+        // dto ==> entity
         Map<String, Object> entityMap = dtoToEntity(movieDto);
 
         // movie 삽입
         Movie movie = (Movie) entityMap.get("movie");
         movieRepository.save(movie);
 
-        // movieImage삽입
+        // movie image 삽입
         List<MovieImage> movieImages = (List<MovieImage>) entityMap.get("imgList");
-
         movieImages.forEach(image -> movieImageRepository.save(image));
 
         return movie.getMno();
@@ -110,17 +110,15 @@ public class MovieServiceImpl implements MovieService {
     @Transactional
     @Override
     public Long movieUpdate(MovieDto movieDto) {
-        // 영화정보 : title => movie Entity
-        // 이미지 : movieImage Entity
+        // dto ==> entity
         Map<String, Object> entityMap = dtoToEntity(movieDto);
 
         // movie 기존 image 제거
         Movie movie = (Movie) entityMap.get("movie");
         movieImageRepository.deleteByMovie(movie);
 
-        // movieImage삽입
+        // movie image 삽입
         List<MovieImage> movieImages = (List<MovieImage>) entityMap.get("imgList");
-
         movieImages.forEach(image -> movieImageRepository.save(image));
 
         return movie.getMno();

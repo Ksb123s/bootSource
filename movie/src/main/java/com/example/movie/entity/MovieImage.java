@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @ToString(exclude = "movie")
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class MovieImage {
 
     @SequenceGenerator(name = "movie_image_seq_gen", sequenceName = "movie_image_seq", allocationSize = 1)
@@ -29,10 +29,11 @@ public class MovieImage {
     private Long inum;
 
     private String uuid;
+
     private String imgName;
+
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Movie movie;
-
 }

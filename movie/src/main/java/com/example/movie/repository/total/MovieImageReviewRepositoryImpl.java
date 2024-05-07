@@ -56,8 +56,8 @@ public class MovieImageReviewRepositoryImpl extends QuerydslRepositorySupport im
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(movie.mno.gt(0L));
-        // 검색조건
-        // 검색 타입 존재
+
+        // 검색 조건
         BooleanBuilder conditionBuilder = new BooleanBuilder();
         if (type.contains("t")) {
             conditionBuilder.or(movie.title.contains(keyword));

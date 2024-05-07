@@ -8,7 +8,6 @@ import com.example.movie.entity.Movie;
 import com.example.movie.entity.Review;
 
 public interface ReviewService {
-
     // 특정 영화의 모든 리뷰 가져오기
     List<ReviewDto> getListOfMovie(Long mno);
 
@@ -22,11 +21,10 @@ public interface ReviewService {
     Long updateReview(ReviewDto reviewDto);
 
     public default ReviewDto entityToDto(Review review) {
-
         return ReviewDto.builder()
                 .reviewNo(review.getReviewNo())
-                .grade(review.getGrade())
                 .text(review.getText())
+                .grade(review.getGrade())
                 .createdDate(review.getCreatedDate())
                 .lastModifiedDate(review.getLastModifiedDate())
                 .mid(review.getMember().getMid())
@@ -34,20 +32,15 @@ public interface ReviewService {
                 .email(review.getMember().getEmail())
                 .mno(review.getMovie().getMno())
                 .build();
-
     }
 
-    public default Review dtoToEntity(ReviewDto reviewdDto) {
-        Movie movie = Movie.builder().mno(reviewdDto.getMno()).build();
-        Member member = Member.builder().mid(reviewdDto.getMid())
-                .build();
+    public default Review dtoToEntity(ReviewDto reviewDto) {
         return Review.builder()
-                .reviewNo(reviewdDto.getReviewNo())
-                .grade(reviewdDto.getGrade())
-                .text(reviewdDto.getText())
-                .member(member)
-                .movie(movie)
+                .reviewNo(reviewDto.getReviewNo())
+                .text(reviewDto.getText())
+                .grade(reviewDto.getGrade())
+                .member(Member.builder().mid(reviewDto.getMid()).build())
+                .movie(Movie.builder().mno(reviewDto.getMno()).build())
                 .build();
     }
-
 }

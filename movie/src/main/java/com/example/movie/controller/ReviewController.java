@@ -4,13 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.movie.dto.ReviewDto;
-import com.example.movie.entity.Movie;
-import com.example.movie.entity.Review;
-import com.example.movie.repository.ReviewRepository;
-import com.example.movie.service.MovieService;
 import com.example.movie.service.ReviewService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
@@ -24,43 +21,51 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
+@Log4j2
 @RestController
 @RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final ReviewService service;
+    private final ReviewService reviewService;
 
+    // /3/all
     @GetMapping("/{mno}/all")
-    public ResponseEntity<List<ReviewDto>> getReviewList(@PathVariable("mno") Long mno) {
-
-        return new ResponseEntity<>(service.getListOfMovie(mno), HttpStatus.OK);
+    public ResponseEntity<List<ReviewDto>> getReviews(@PathVariable("mno") Long mno) {
+        return new ResponseEntity<>(reviewService.getListOfMovie(mno), HttpStatus.OK);
     }
 
-    //
+    // /3 + POST => 리뷰번호 리턴
     @PostMapping("/{mno}")
-    public ResponseEntity<Long> postReview(@RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<Long> postMethodName(@RequestBody ReviewDto reviewDto) {
+        log.info("리뷰 등록 {}", reviewDto);
 
-        return new ResponseEntity<Long>(service.addReview(reviewDto), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{mno}/{reviewNo}")
-    public ResponseEntity<Long> remove(@PathVariable("reviewNo") Long reviewNo) {
-
-        service.removeReview(reviewNo);
+        Long reviewNo = reviewService.addReview(reviewDto);
         return new ResponseEntity<Long>(reviewNo, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{mno}/{reviewNo}")
+    public ResponseEntity<Long> deleteReview(@PathVariable("reviewNo") Long reviewNo) {
+        log.info("리뷰 삭제 {}");
+        reviewService.removeReview(reviewNo);
+        return new ResponseEntity<>(reviewNo, HttpStatus.OK);
+    }
+
+    // /299/5 + GET
     @GetMapping("/{mno}/{reviewNo}")
     public ResponseEntity<ReviewDto> getReview(@PathVariable("reviewNo") Long reviewNo) {
-        return new ResponseEntity<ReviewDto>(service.getReview(reviewNo), HttpStatus.OK);
+        log.info("review 가져오기 {}", reviewNo);
+        return new ResponseEntity<>(reviewService.getReview(reviewNo), HttpStatus.OK);
     }
 
     @PutMapping("/{mno}/{reviewNo}")
-    public ResponseEntity<Long> putUpdateReview(@PathVariable("reviewNo") Long reviewNo,
+    public ResponseEntity<Long> putMethodName(@PathVariable("reviewNo") Long reviewNo,
             @RequestBody ReviewDto reviewDto) {
+        log.info("review 수정 {}", reviewDto);
 
-        return new ResponseEntity<Long>(service.updateReview(reviewDto), HttpStatus.OK);
+        reviewService.updateReview(reviewDto);
+
+        return new ResponseEntity<>(reviewNo, HttpStatus.OK);
     }
 
 }

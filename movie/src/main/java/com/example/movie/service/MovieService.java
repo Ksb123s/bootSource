@@ -55,42 +55,48 @@ public interface MovieService {
 
     // dto => entity
     public default Map<String, Object> dtoToEntity(MovieDto dto) {
+
         Map<String, Object> entityMap = new HashMap<>();
 
-        // movie Entity 생성
+        // Movie Entity 생성
         Movie movie = Movie.builder()
                 .mno(dto.getMno())
                 .title(dto.getTitle())
                 .build();
-        // 생성된 movie entity map에 담기
+        // 생성된 movie entity 를 Map 에 담기: put()
         entityMap.put("movie", movie);
+
         // List<MovieImageDto> movieImageDtos 를
-        // List<Movie> 변환
+        // List<MovieImage> 변환
         List<MovieImageDto> movieImageDtos = dto.getMovieImageDtos();
-        List<MovieImage> movieImages = new ArrayList<>();
+        // List<MovieImage> movieImages = new ArrayList<>();
+        // if (movieImageDtos != null && movieImageDtos.size() > 0) {
+        // for (MovieImageDto mDto : movieImageDtos) {
+        // MovieImage movieImage = MovieImage.builder()
+        // .imgName(mDto.getImgName())
+        // .uuid(mDto.getUuid())
+        // .path(mDto.getPath())
+        // .build();
+
+        // movieImages.add(movieImage);
+        // }
+        // }
 
         if (movieImageDtos != null && movieImageDtos.size() > 0) {
-            movieImages = movieImageDtos.stream().map((movieImage) -> {
-                return MovieImage.builder()
-                        .imgName(movieImage.getImgName())
-                        .path(movieImage.getPath())
-                        .uuid(movieImage.getUuid())
+            List<MovieImage> movieImages = movieImageDtos.stream().map(mDto -> {
+                MovieImage movieImage = MovieImage.builder()
+                        .imgName(mDto.getImgName())
+                        .uuid(mDto.getUuid())
+                        .path(mDto.getPath())
                         .movie(movie)
                         .build();
+                return movieImage;
             }).collect(Collectors.toList());
-            // for (MovieImageDto mdto : movieImageDtos) {
-            // MovieImage movieImage = MovieImage.builder()
-            // .imgName(mdto.getImgName())
-            // .path(mdto.getPath())
-            // .uuid(mdto.getUuid())
-            // .movie(movie)
-            // .build();
-            // movieImages.add(movieImage);
-            // }
+
+            entityMap.put("imgList", movieImages);
         }
 
-        // 변환이 끝는 entity list를 map에 담기 : put()
-        entityMap.put("imgList", movieImages);
+        // 변환이 끝난 entity list를 Map 담기 : put()
         return entityMap;
     }
 }

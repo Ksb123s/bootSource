@@ -1,36 +1,39 @@
-const input = document.querySelector("#fileInput");
-
+// fileInput 찾기
+const fileInput = document.querySelector("#fileInput");
+// 업로드 파일 보여주기 찾기
 const uploadResult = document.querySelector(".uploadResult ul");
 
 function checkExtension(fileName) {
   // 정규식 사용
-  const regex = /(.*?).(png|gif|jpg|jpeg)$/;
-  console.log(regex.test(fileName));
+  const regex = /(.*?).(png|gif|jpg)$/;
 
+  // txt=>false, 이미지=>true
+  console.log(regex.test(fileName));
   return regex.test(fileName);
 }
 
 function showUploadImages(arr) {
   console.log("showUploadImages ", arr);
 
-  let tages = "";
-  arr.forEach((obj) => {
-    tages += `<li data-name="${obj.fileName}" data-path="${obj.folderPath}" data-uuid="${obj.uuid}">`;
-    tages += `<div>`;
-    tages += `<a href=""><img src="/upload/display?fileName=${obj.thumbImageURL}" class="block"></a>`;
-    tages += `<span class="text-sm d-inline-block mx-1">${obj.fileName}</span>`;
-    tages += ` <a href="#" data-file="${obj.imageURL}">`;
-    tages += ` <i class="fa-solid fa-xmark" ></i>`;
-    tages += `</a></div></li>`;
+  let tags = "";
+
+  arr.forEach((obj, idx) => {
+    tags += `<li data-name="${obj.fileName}" data-path="${obj.folderPath}" data-uuid="${obj.uuid}">`;
+    tags += `<div>`;
+    tags += `<a href=""><img src="/upload/display?fileName=${obj.thumbImageURL}" class="block"></a>`;
+    tags += `<span class="text-sm d-inline-block mx-1">${obj.fileName}</span>`;
+    tags += `<a href="#" data-file="${obj.imageURL}">`;
+    tags += `<i class="fa-solid fa-xmark"></i></a>`;
+    tags += `</div></li>`;
   });
-  uploadResult.insertAdjacentHTML("beforeend", tages);
+  uploadResult.insertAdjacentHTML("beforeend", tags);
 }
 
-// fileInput change event
-
-// 이미지 파일이라면 formdata 객체 생성후 어펜드
-input.addEventListener("change", (e) => {
-  console.log(e.target);
+// fileInput change 이벤트
+fileInput.addEventListener("change", (e) => {
+  // checkExtension() 호출
+  // 이미지 파일이라면 FormData() 객체 생성 후
+  // append
 
   const files = e.target.files;
 
@@ -41,39 +44,48 @@ input.addEventListener("change", (e) => {
       formData.append("uploadFiles", files[index]);
     }
   }
+
   for (const value of formData.values()) {
     console.log(value);
   }
 
   fetch("/upload/uploadAjax", {
     method: "post",
+    headers: {
+      "X-CSRF-TOKEN": csrfValue,
+    },
     body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+
       showUploadImages(data);
     });
 });
 
-const form = document.querySelector("#register-form");
-
-form.addEventListener("submit", (e) => {
+// register, modify 중복 사용
+// form submit 기능 중지
+// uploadResult ul li 태그 요소 가져오기
+document.querySelector("#register-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const liList = document.querySelectorAll(".uploadResult ul li");
-  console.log(liList);
+  const form = e.target;
 
-  //   수집된 정보를 폼 태그에 붙여넣기
+  //첨부파일 정보 수집
+  const attachInfos = document.querySelectorAll(".uploadResult ul li");
+  console.log(attachInfos);
+
+  //수집된 정보를  폼 태그 자식으로 붙여넣기
   let result = "";
-  liList.forEach((i, idx) => {
-    // hidden 3 => MoveImageDto 객체 하나로 변경
-    // movieImageDtos dto 이름에 맞춰 설정
-    result += `<input type='hidden' value='${i.dataset.path}' name='movieImageDtos[${idx}].path'>`;
-    result += `<input type='hidden' value='${i.dataset.uuid}' name='movieImageDtos[${idx}].uuid'>`;
-    result += `<input type='hidden' value='${i.dataset.name}' name='movieImageDtos[${idx}].imgName'>`;
+  attachInfos.forEach((obj, idx) => {
+    // hidden 3개 => MovieImageDto 객체 하나로 변경
+    result += `<input type='hidden' value='${obj.dataset.path}' name='movieImageDtos[${idx}].path'>`;
+    result += `<input type='hidden' value='${obj.dataset.uuid}' name='movieImageDtos[${idx}].uuid'>`;
+    result += `<input type='hidden' value='${obj.dataset.name}' name='movieImageDtos[${idx}].imgName'>`;
   });
   form.insertAdjacentHTML("beforeend", result);
+
   console.log(form.innerHTML);
 
   form.submit();

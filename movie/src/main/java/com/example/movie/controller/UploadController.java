@@ -16,7 +16,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,8 +50,11 @@ public class UploadController {
         log.info("upload form 요청");
     }
 
+    // ResponseEntity : 데이터 + 상태코드
+
     @PostMapping("/uploadAjax")
     public ResponseEntity<List<UploadResultDto>> postUpload(MultipartFile[] uploadFiles) {
+
         List<UploadResultDto> uploadResultDtos = new ArrayList<>();
 
         for (MultipartFile multipartFile : uploadFiles) {
@@ -75,20 +78,18 @@ public class UploadController {
                 // 원본 파일 저장
                 multipartFile.transferTo(savePath);
 
-                // 썸네일 저장
+                // 썸네일 파일 저장
                 String thumbSaveName = uploadPath + File.separator + saveFolderPath + File.separator + "s_" + uuid + "_"
                         + fileName;
-
                 File thumbFile = new File(thumbSaveName);
                 // 썸네일 생성
-
                 Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 100, 100);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            // 저장된 파일 정보 객체 생성후 리스트 에 추가
-            uploadResultDtos.add(new UploadResultDto(saveFolderPath, uuid, fileName));
 
+            // 저장된 파일 정보 객체 생성 후 리스트에 추가
+            uploadResultDtos.add(new UploadResultDto(saveFolderPath, uuid, fileName));
         }
         return new ResponseEntity<>(uploadResultDtos, HttpStatus.OK);
     }
@@ -110,17 +111,15 @@ public class UploadController {
 
         try {
             String srcFileName = URLDecoder.decode(fileName, "utf-8");
-            // File.separator : 운영 체제에 따라 /, \
-            // c:\\upload\\scrFileName
 
+            // File.separator : 운영체제에 따라 /, \
+            // c:\\upload\\srcFileName
             File file = new File(uploadPath + File.separator + srcFileName);
 
             HttpHeaders headers = new HttpHeaders();
-
             headers.add("Content-Type", Files.probeContentType(file.toPath()));
-            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK);
+            result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -128,22 +127,25 @@ public class UploadController {
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<Boolean> RemoveImage(@RequestBody String filePath) {
+    public ResponseEntity<Boolean> postMethodName(String filePath) {
         log.info("파일 삭제 요청 {}", filePath);
 
-        String srcFileName = "";
+        // 2024%5C04%5C29%2F2238807f-3897-4245-972e-5677cfe30b1e_inception2.jpg
+
+        String srcFileName = null;
+
         try {
             srcFileName = URLDecoder.decode(filePath, "utf-8");
+            // File.separator : 운영체제에 따라 /, \
+            // c:\\upload\\srcFileName
             File file = new File(uploadPath + File.separator + srcFileName);
-
             file.delete(); // 원본 파일 제거
 
             File thumbFile = new File(file.getParent(), "s_" + file.getName());
+            boolean result = thumbFile.delete();
 
-            Boolean result = thumbFile.delete();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -17,45 +17,50 @@
     <button class="uploadBtn">업로드</button>
     <div id="output"></div>
     <script>
-      // x클릭시 파일 삭제 요청  function
-      const output = document.querySelector("#output");
-      output.addEventListener("click", (e) => {
+      // x를 누르면 파일 삭제 요청
+      // a 태그 기능 중지 => href 값 가져와서 화면 출력
+      document.querySelector("#output").addEventListener("click", (e) => {
         e.preventDefault();
 
-        if (e.target.classList.contains("fa-solid")) {
-          const filePath = e.target.closest("a").getAttribute("href");
+        console.log("x 클릭 ", e.target); // <i class="fa-solid fa-xmark"></i>
+        console.log("x 클릭 ", e.currentTarget); //
 
-          const formData = new FormData();
+        const currentDiv = e.target.closest("div");
 
-          // formData.append("filePath", filePath);
-          console.log(filePath);
-          fetch("/upload/remove", {
-            method: "post",
-            body: filePath,
-          })
-            .then((response) => response.text())
-            .then((data) => {
-              console.log(data);
-              if (data) {
-                const image = e.target.closest("div");
-                image.remove();
-              }
-            });
-        }
+        const filePath = e.target.closest("a").getAttribute("href");
+        console.log(filePath);
+
+        const formData = new FormData();
+        formData.append("filePath", filePath);
+
+        fetch("/upload/remove", {
+          method: "post",
+          body: formData,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            console.log(data);
+            if (data) {
+              // 해당div제거
+              currentDiv.remove();
+            }
+          });
       });
 
-      // 이미지 가저오기
       function showUploadImages(arr) {
         console.log("showUploadImages ", arr);
 
-        let tages = "";
+        const output = document.querySelector("#output");
+
+        let tags = "";
+
         arr.forEach((element) => {
-          tages += `<div>`;
-          tages += `<img src="display?fileName=${element.thumbImageURL}">`;
-          tages += `<a href="${element.imageURL}"><i class="fa-solid fa-xmark"></i></a>`;
-          tages += `</div>`;
+          tags += `<div>`;
+          tags += `<img src="display?fileName=${element.thumbImageURL}">`;
+          tags += `<a href="${element.imageURL}"><i class="fa-solid fa-xmark"></i></a>`;
+          tags += `</div>`;
         });
-        output.insertAdjacentHTML("beforeend", tages);
+        output.insertAdjacentHTML("beforeend", tags);
       }
 
       document.querySelector(".uploadBtn").addEventListener("click", () => {
@@ -87,6 +92,7 @@
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
+
             showUploadImages(data);
           });
       });
