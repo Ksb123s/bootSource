@@ -18,23 +18,25 @@ const reviewsLoaded = () => {
 
       let result = "";
       data.forEach((review) => {
-        result += `<div class="d-flex justify-content-between my-2 border-bottom py-2 review-row" data-rno="${review.reviewNo}"> 
-          <div class="flex-grow-1 align-self-center">
-            <div><span class="font-semibold">${review.text}</span></div>
-            <div class="small text-muted">
-              <span class="d-inline-block mr-3">${review.nickname}</span>
-              평점 : <span class="grade">${review.grade}</span>
-            </div>
-            <div class="text-muted"><span class="small">${formatDate(review.createdDate)}</span></div>
-          </div>
-          <div class="d-flex flex-column align-self-center">
-            <div class="mb-2">
-              <button class="btn btn-outline-danger btn-sm">삭제</button>
-            </div>
-            <div>
-              <button class="btn btn-outline-success btn-sm">수정</button>
-            </div>
-          </div>
+        result += `<div class="d-flex justify-content-between my-2 border-bottom py-2 review-row" data-rno="${review.reviewNo}">`;
+        result += `<div class="flex-grow-1 align-self-center">`;
+        result += `<div><span class="font-semibold">${review.text}</span></div>`;
+        result += `<div class="small text-muted">`;
+        result += `<span class="d-inline-block mr-3">${review.nickname}</span>`;
+        result += `평점 : <span class="grade">${review.grade}</span>`;
+        result += `</div>`;
+        result += `<div class="text-muted"><span class="small">${formatDate(review.createdDate)}</span></div>`;
+        result += ` </div>`;
+        result += `<div class="d-flex flex-column align-self-center">`;
+        if (`${review.email}` == user) {
+          result += `<div class="mb-2">`;
+          result += `<button class="btn btn-outline-danger btn-sm">삭제</button>`;
+          result += `</div>`;
+          result += `<div>`;
+          result += `<button class="btn btn-outline-success btn-sm">수정</button>`;
+          result += `</div> `;
+        }
+        result += `</div>
         </div>`;
       });
       reviewList.innerHTML = result;
@@ -51,6 +53,7 @@ reviewForm.addEventListener("submit", (e) => {
   // text, grade, mid, mno
   const text = reviewForm.querySelector("#text");
   const mid = reviewForm.querySelector("#mid");
+  const email = reviewForm.querySelector("#email");
   const nickname = reviewForm.querySelector("#nickname");
   // 수정이라면 reviewNo 가 존재함
   const reviewNo = reviewForm.querySelector("#reviewNo");
@@ -58,6 +61,7 @@ reviewForm.addEventListener("submit", (e) => {
   const body = {
     mno: mno,
     text: text.value,
+    email: email.value,
     grade: grade || 0,
     mid: mid.value,
     reviewNo: reviewNo.value,
@@ -68,6 +72,7 @@ reviewForm.addEventListener("submit", (e) => {
     fetch(`/reviews/${mno}`, {
       headers: {
         "content-type": "application/json",
+        "X-CSRF-TOKEN": csrfValue,
       },
       body: JSON.stringify(body),
       method: "post",
@@ -77,7 +82,6 @@ reviewForm.addEventListener("submit", (e) => {
         console.log(data);
 
         text.value = "";
-        nickname.value = "";
         // grade = 0;
         reviewForm.querySelector(".starrr a:nth-child(" + grade + ")").click();
 
@@ -89,6 +93,7 @@ reviewForm.addEventListener("submit", (e) => {
     fetch(`/reviews/${mno}/${reviewNo.value}`, {
       headers: {
         "content-type": "application/json",
+        "X-CSRF-TOKEN": csrfValue,
       },
       body: JSON.stringify(body),
       method: "put",
@@ -98,7 +103,6 @@ reviewForm.addEventListener("submit", (e) => {
         console.log(data);
 
         text.value = "";
-        nickname.value = "";
         reviewNo.value = "";
         reviewForm.querySelector(".starrr a:nth-child(" + grade + ")").click();
 
@@ -114,6 +118,8 @@ reviewList.addEventListener("click", (e) => {
   // 부모요소가 이벤트를 감지하는 형태로 작성 => 실제 이벤트 대상 요소가 무엇인지 찾아야 함
   console.log("이벤트 대상 ", e.target);
 
+  const email = reviewForm.querySelector("#email").value;
+
   const target = e.target;
   // 리뷰 댓글 번호 가져오기
   const reviewNo = target.closest(".review-row").dataset.rno;
@@ -121,11 +127,19 @@ reviewList.addEventListener("click", (e) => {
   if (target.classList.contains("btn-outline-danger")) {
     if (!confirm("리뷰를 정말로 삭제하시겠습니까?")) return;
 
+    const form = new FormData();
+    form.append("email", email);
+    console.log(form);
     fetch(`/reviews/${mno}/${reviewNo}`, {
       method: "delete",
+      headers: {
+        "X-CSRF-TOKEN": csrfValue,
+      },
+      body: email,
     })
       .then((response) => response.text())
       .then((data) => {
+        console.log(data);
         alert(data + " 번 리뷰가 삭제되었습니다.");
         reviewsLoaded();
       });
@@ -138,6 +152,7 @@ reviewList.addEventListener("click", (e) => {
         reviewForm.querySelector("#mid").value = data.mid;
         reviewForm.querySelector("#nickname").value = data.nickname;
         reviewForm.querySelector("#text").value = data.text;
+        reviewForm.querySelector("#email").value = data.email;
         // 이벤트 click 을 직접 호출
         reviewForm.querySelector(".starrr a:nth-child(" + data.grade + ")").click();
         reviewForm.querySelector("button").innerHTML = "리뷰 수정";

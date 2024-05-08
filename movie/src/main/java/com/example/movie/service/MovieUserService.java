@@ -33,6 +33,7 @@ public interface MovieUserService {
     public default MemberDto entityToDto(Member entity) {
         return MemberDto.builder()
                 .email(entity.getEmail())
+                .mid(entity.getMid())
                 .nickname(entity.getNickname())
                 .password(entity.getPassword())
                 .role(entity.getRole())

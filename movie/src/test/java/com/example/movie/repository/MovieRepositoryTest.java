@@ -74,10 +74,10 @@ public class MovieRepositoryTest {
         // });
 
         Member member = Member.builder()
-                .email("admin1@naver.com")
+                .email("admin2@naver.com")
                 .password(passwordEncoder.encode("1111"))
                 .role(MemberRole.ADMIN)
-                .nickname("admin1")
+                .nickname("admin2")
                 .build();
         memberRepository.save(member);
     }
@@ -189,6 +189,11 @@ public class MovieRepositoryTest {
 
         // 회원삭제
         memberRepository.delete(member);
+    }
+
+    @Test
+    public void findMember() {
+        System.out.println(memberRepository.findById(101L));
     }
 
 }
